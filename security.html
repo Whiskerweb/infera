@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sécurité — Infera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+
+<div id="nav-slot"></div>
+
+<div class="wrap">
+
+  <section class="page-head reveal">
+    <div class="crumb">
+      <a href="index.html" data-fr="Accueil" data-en="Home">Accueil</a>
+      <span class="sep">/</span>
+      <span class="cur" data-fr="Sécurité" data-en="Security">Sécurité</span>
+    </div>
+    <h1 data-fr="Souverain, conforme, par défaut."
+        data-en="Sovereign, compliant, by default.">
+      Souverain, conforme, par défaut.
+    </h1>
+    <p class="lead"
+      data-fr="RGPD par construction. Niveaux HDS et SecNumCloud pour les données de santé et les workloads régulés. Zero-trust à chaque couche."
+      data-en="GDPR by construction. HDS and SecNumCloud tiers for healthcare and regulated workloads. Zero-trust at every layer.">
+      RGPD par construction. Niveaux HDS et SecNumCloud pour les données de santé et les workloads régulés. Zero-trust à chaque couche.
+    </p>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Certifications" data-en="Certifications">Certifications</span>
+      <h2 data-fr="Ce que chaque niveau garantit." data-en="What each tier guarantees.">
+        Ce que chaque niveau garantit.
+      </h2>
+    </div>
+    <div class="sec-matrix">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Grid Public</th>
+            <th>Trusted</th>
+            <th>HDS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>RGPD</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th>Data UE only</th><td class="partial">best-effort</td><td class="yes">✓ contractuel</td><td class="yes">✓ garanti</td></tr>
+          <tr><th>KYC provider</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓ renforcé</td></tr>
+          <tr><th>Chiffrement E2E</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓ + HSM</td></tr>
+          <tr><th>HDS</th><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr><th>SecNumCloud</th><td class="no">—</td><td class="partial">en cours</td><td class="yes">✓</td></tr>
+          <tr><th>ISO 27001</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><th>Audit trail</th><td class="partial">30j</td><td class="yes">1 an</td><td class="yes">5 ans</td></tr>
+          <tr><th>DPA signable</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓ sur mesure</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Principes" data-en="Principles">Principes</span>
+      <h2 data-fr="Quatre règles, jamais enfreintes." data-en="Four rules, never bent.">
+        Quatre règles, jamais enfreintes.
+      </h2>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">◈</div>
+        <h3>Zero-trust</h3>
+        <p>Aucun node n'est implicitement fiable. Chaque job est signé, chiffré, exécuté dans un environnement isolé, puis prouvé.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⌁</div>
+        <h3 data-fr="Minimisation" data-en="Minimization">Minimisation</h3>
+        <p>Nous ne stockons que le strict nécessaire. Pas de logs contenant les payloads. Pas de réentraînement sur vos données.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⎔</div>
+        <h3 data-fr="Isolation par niveau" data-en="Tier isolation">Isolation par niveau</h3>
+        <p>Les pools Public, Trusted et HDS ne partagent ni nodes, ni routing, ni instances. Pas de contamination possible.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⎎</div>
+        <h3 data-fr="Auditable par défaut" data-en="Auditable by default">Auditable par défaut</h3>
+        <p>Chaque requête émet un reçu signé. Téléchargeable via API, suffisant pour un audit CNIL ou un contrôle HDS.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<section class="waitlist">
+  <div class="wrap waitlist-inner reveal">
+    <h2 data-fr="Besoin d'un DPA ?" data-en="Need a DPA?">Besoin d'un DPA ?</h2>
+    <p data-fr="DPA signable en ligne, pas d'aller-retour juridique de 3 semaines."
+       data-en="DPA signable online, no 3-week legal ping-pong.">
+      DPA signable en ligne, pas d'aller-retour juridique de 3 semaines.
+    </p>
+    <a href="contact.html" class="cta" data-fr="Parler sécurité →" data-en="Talk security →">Parler sécurité →</a>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="partials.js"></script>
+<script src="shared.js"></script>
+<script>mount('security');</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal — Infera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+
+<div id="nav-slot"></div>
+
+<div class="wrap">
+
+  <section class="page-head reveal">
+    <div class="crumb">
+      <a href="index.html" data-fr="Accueil" data-en="Home">Accueil</a>
+      <span class="sep">/</span>
+      <span class="cur" data-fr="Journal" data-en="Journal">Journal</span>
+    </div>
+    <h1 data-fr="Le journal." data-en="The journal.">Le journal.</h1>
+    <p class="lead" data-fr="Notes d'ingénierie, décisions d'architecture, états du réseau. Publié quand il y a quelque chose à dire, jamais pour faire du bruit."
+       data-en="Engineering notes, architecture decisions, network state. Published when there's something to say, never to make noise.">
+      Notes d'ingénierie, décisions d'architecture, états du réseau. Publié quand il y a quelque chose à dire, jamais pour faire du bruit.
+    </p>
+  </section>
+
+  <section class="block reveal">
+    <div class="articles">
+      <a href="#" class="article">
+        <div class="meta"><span class="tag-cat">ARCHITECTURE</span><span>12 AVR 2026 · 8 MIN</span></div>
+        <h3 data-fr="Pourquoi le routing par réputation bat le routing par latence seule."
+            data-en="Why reputation-based routing beats latency-only routing.">
+          Pourquoi le routing par réputation bat le routing par latence seule.
+        </h3>
+        <p data-fr="Retour d'expérience sur trois mois de beta : la réputation pondérée réduit les retries de 41% sans sacrifier la TTFT."
+           data-en="Three months of beta insights: weighted reputation cuts retries by 41% without hurting TTFT.">
+          Retour d'expérience sur trois mois de beta : la réputation pondérée réduit les retries de 41% sans sacrifier la TTFT.
+        </p>
+        <div class="author"><div class="author-avatar">ML</div><span>Marine Lefort — Tech Lead Orchestrator</span></div>
+      </a>
+      <a href="#" class="article">
+        <div class="meta"><span class="tag-cat">SÉCURITÉ</span><span>28 MAR 2026 · 12 MIN</span></div>
+        <h3 data-fr="HDS sur réseau décentralisé : comment on a découpé les pools."
+            data-en="HDS on a decentralized network: how we partitioned the pools.">
+          HDS sur réseau décentralisé : comment on a découpé les pools.
+        </h3>
+        <p data-fr="Isolation physique, cryptographique, contractuelle. Les trois couches qui rendent un cloud P2P compatible santé."
+           data-en="Physical, cryptographic, contractual isolation. The three layers that make a P2P cloud healthcare-compatible.">
+          Isolation physique, cryptographique, contractuelle. Les trois couches qui rendent un cloud P2P compatible santé.
+        </p>
+        <div class="author"><div class="author-avatar">RK</div><span>Raphaël Kouassi — Security Lead</span></div>
+      </a>
+      <a href="#" class="article">
+        <div class="meta"><span class="tag-cat">ÉCOLOGIE</span><span>14 MAR 2026 · 6 MIN</span></div>
+        <h3 data-fr="Le datacenter le plus écologique est celui qu'on ne construit pas."
+            data-en="The greenest datacenter is the one we don't build.">
+          Le datacenter le plus écologique est celui qu'on ne construit pas.
+        </h3>
+        <p data-fr="On a fait le calcul carbone sur 1 000 requêtes Trusted. L'empreinte marginale est 3,2× plus basse qu'un cloud hyperscaler équivalent."
+           data-en="We ran the carbon math on 1,000 Trusted requests. Marginal footprint is 3.2× lower than an equivalent hyperscaler cloud.">
+          On a fait le calcul carbone sur 1 000 requêtes Trusted. L'empreinte marginale est 3,2× plus basse qu'un cloud hyperscaler équivalent.
+        </p>
+        <div class="author"><div class="author-avatar">EM</div><span>Élise Moreau — Sustainability</span></div>
+      </a>
+      <a href="#" class="article">
+        <div class="meta"><span class="tag-cat">PRODUIT</span><span>02 MAR 2026 · 4 MIN</span></div>
+        <h3 data-fr="Support streaming function-calling : ce qui change pour les agents."
+            data-en="Streaming function-calling support: what changes for agents.">
+          Support streaming function-calling : ce qui change pour les agents.
+        </h3>
+        <p data-fr="Les tool calls arrivent maintenant en streaming, compatible SDK OpenAI. Détails d'implémentation et edge cases."
+           data-en="Tool calls now stream, OpenAI SDK compatible. Implementation details and edge cases.">
+          Les tool calls arrivent maintenant en streaming, compatible SDK OpenAI. Détails d'implémentation et edge cases.
+        </p>
+        <div class="author"><div class="author-avatar">TG</div><span>Théo Grangier — Product</span></div>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<div id="footer-slot"></div>
+<script src="partials.js"></script>
+<script src="shared.js"></script>
+<script>mount('blog');</script>
+</body>
+</html>

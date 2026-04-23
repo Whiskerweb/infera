@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produit — Infera</title>
+  <meta name="description" content="Architecture P2P, routing par tier, compatibilité OpenAI stricte.">
+  <meta name="theme-color" content="#0A0A0B">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230A0A0B'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%237EE787'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="pages.css">
+  <style>
+    /* ==== Product hero — cinematic, consistent with home ==== */
+    .prod-hero {
+      position: relative;
+      margin: -1px -2rem 0;
+      padding: 5.5rem 2rem 4rem;
+      background: radial-gradient(ellipse at 75% 30%, #0F1418 0%, #0A0B0D 55%, #07080A 100%);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .prod-hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 80% 90% at 70% 50%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%);
+    }
+    .prod-hero-inner {
+      position: relative;
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .prod-hero .crumb {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+    }
+    .prod-hero .crumb a { color: var(--text-muted); transition: color 0.15s; }
+    .prod-hero .crumb a:hover { color: var(--text); }
+    .prod-hero .crumb .sep { color: var(--text-dim); opacity: 0.5; }
+    .prod-hero .crumb .cur { color: var(--accent); }
+    .prod-hero h1 {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+      margin: 0 0 1.5rem;
+      background: linear-gradient(180deg, #ffffff 45%, #a8adb7);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+    }
+    .prod-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--accent) 0%, #B5F5B9 50%, var(--blue) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+    }
+    .prod-hero .lead {
+      font-size: 1.1rem;
+      color: #b4bac4;
+      max-width: 540px;
+      line-height: 1.55;
+      margin: 0 0 2rem;
+    }
+    .prod-hero-ctas { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+    .prod-hero-ctas .cta.primary {
+      background: var(--accent); color: #0A1A10; border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(126,231,135,0.25), inset 0 0 0 1px rgba(255,255,255,0.1);
+    }
+    .prod-hero-ctas .cta.primary:hover { box-shadow: 0 14px 38px rgba(126,231,135,0.4), inset 0 0 0 1px rgba(255,255,255,0.2); }
+
+    /* Routing decision card (right side of hero) */
+    .routing-card {
+      position: relative;
+      padding: 1.5rem 1.5rem 1.25rem;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(22,26,32,0.72), rgba(14,16,20,0.55));
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .routing-card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 0.85rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text);
+    }
+    .routing-card-header .left { display: inline-flex; align-items: center; gap: 0.55rem; }
+    .routing-card-header .left::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 10px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .routing-card-header .badge {
+      color: var(--accent);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+    }
+    .rc-rows { display: grid; gap: 0.55rem; font-family: 'JetBrains Mono', monospace; }
+    .rc-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 0.82rem;
+    }
+    .rc-row .lbl { color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.68rem; }
+    .rc-row .val { color: var(--text); font-variant-numeric: tabular-nums; }
+    .rc-row .val.ok { color: var(--accent); }
+    .rc-row .val.blue { color: var(--blue); }
+    .rc-divider {
+      margin: 1rem -0.25rem 0.75rem;
+      border-top: 1px dashed rgba(255,255,255,0.08);
+    }
+    .rc-chain {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+    .rc-chain .hop {
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+    }
+    .rc-chain .arr { color: var(--accent); font-weight: 600; }
+
+    /* ==== Architecture 3-layer diagram ==== */
+    .arch {
+      position: relative;
+      padding: 2.5rem 2rem 2rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #0D1014, #0A0B0D);
+      overflow: hidden;
+    }
+    .arch::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 85%);
+      pointer-events: none;
+    }
+    .arch-svg-wrap { position: relative; z-index: 1; }
+    .arch-svg { width: 100%; height: 460px; display: block; }
+    .arch-layer-label {
+      fill: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .arch-layer-sub {
+      fill: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+    }
+    .arch-lane-bg { fill: #0E1216; stroke: rgba(255,255,255,0.08); }
+    .arch-node-box {
+      fill: rgba(255,255,255,0.03);
+      stroke: rgba(255,255,255,0.12);
+    }
+    .arch-node-box.accent {
+      stroke: rgba(126,231,135,0.55);
+      fill: rgba(126,231,135,0.06);
+    }
+    .arch-node-text {
+      fill: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+    }
+    .arch-node-sub {
+      fill: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      letter-spacing: 0.06em;
+    }
+    .arch-link {
+      stroke: rgba(126,231,135,0.35);
+      stroke-width: 1;
+      fill: none;
+      stroke-dasharray: 3 3;
+    }
+    .arch-packet {
+      fill: var(--accent);
+      filter: drop-shadow(0 0 6px rgba(126,231,135,0.65));
+    }
+    .arch-ring {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1;
+      opacity: 0.6;
+    }
+
+    /* ==== Request waterfall ==== */
+    .waterfall {
+      padding: 2rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+    .waterfall-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .waterfall-header .title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .waterfall-header .total {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-size: 0.82rem;
+    }
+    .wf-grid {
+      display: grid;
+      grid-template-columns: 160px 1fr 70px;
+      gap: 0.4rem 1rem;
+      align-items: center;
+    }
+    .wf-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text);
+    }
+    .wf-label .sub {
+      display: block;
+      color: var(--text-dim);
+      font-size: 0.68rem;
+      margin-top: 0.1rem;
+    }
+    .wf-bar-track {
+      position: relative;
+      height: 22px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .wf-bar {
+      position: absolute;
+      top: 0; bottom: 0;
+      background: var(--bar-c, var(--accent));
+      opacity: 0.85;
+      border-right: 1px solid rgba(255,255,255,0.25);
+      animation: wfGrow 1.1s cubic-bezier(0.65,0,0.35,1) forwards;
+      transform-origin: left;
+      transform: scaleX(0);
+    }
+    @keyframes wfGrow { to { transform: scaleX(1); } }
+    .wf-ms {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .wf-axis {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 160px 1fr 70px;
+      gap: 1rem;
+    }
+    .wf-axis-inner {
+      position: relative;
+      height: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      color: var(--text-dim);
+    }
+    .wf-axis-inner::before {
+      content: "";
+      position: absolute; left: 0; right: 0; top: 0;
+      height: 1px;
+      background: var(--border);
+    }
+    .wf-tick {
+      position: absolute; top: 4px;
+      transform: translateX(-50%);
+    }
+    .wf-tick::before {
+      content: "";
+      position: absolute; top: -4px; left: 50%;
+      width: 1px; height: 4px;
+      background: var(--border-strong);
+      transform: translateX(-50%);
+    }
+
+    /* ==== Tier comparison ==== */
+    .tier-table {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .tier-table > div {
+      padding: 1rem 1.25rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+    .tier-table > div:nth-child(4n) { border-right: none; }
+    .tier-table > div:nth-last-child(-n+4) { border-bottom: none; }
+    .tier-table .tier-head {
+      background: var(--bg-elev);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .tier-table .tier-head.tier-rec {
+      color: var(--accent);
+      background: linear-gradient(180deg, rgba(126,231,135,0.06), rgba(126,231,135,0));
+    }
+    .tier-table .tier-row-key {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .tier-table .tier-row-key .desc {
+      display: block;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      margin-top: 0.15rem;
+      font-weight: 400;
+    }
+    .tier-check { color: var(--accent); }
+    .tier-dash  { color: var(--text-dim); }
+    .tier-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86rem;
+      color: var(--text);
+    }
+    .tier-rec-col { background: rgba(126,231,135,0.025); }
+
+    /* ==== Compatibility matrix ==== */
+    .compat {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .compat-item {
+      padding: 1.1rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      display: flex; flex-direction: column; gap: 0.35rem;
+      transition: border-color 0.25s var(--ease);
+    }
+    .compat-item:hover { border-color: var(--border-strong); }
+    .compat-item .head {
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .compat-item .head .check { color: var(--accent); font-size: 1rem; }
+    .compat-item .name { color: var(--text); font-weight: 500; font-size: 1rem; }
+    .compat-item .note { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+
+    /* ==== Metric bar footer (like home hero) ==== */
+    .prod-metric-bar {
+      margin: 0 -2rem;
+      border-top: 1px solid var(--border);
+      background: rgba(10,11,13,0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .prod-metric-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 1.75rem 2rem;
+    }
+    .prod-metric {
+      padding: 0 1.75rem;
+      border-right: 1px solid var(--border);
+    }
+    .prod-metric:first-child { padding-left: 0; }
+    .prod-metric:last-child { border-right: none; }
+    .prod-metric-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 0.4rem;
+    }
+    .prod-metric-num {
+      font-size: 1.75rem; font-weight: 600;
+      letter-spacing: -0.02em; color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .prod-metric-num em { font-style: normal; color: var(--accent); }
+    .prod-metric-sub { font-size: 0.74rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+    @media (max-width: 960px) {
+      .prod-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .routing-card { max-width: 100%; }
+      .tier-table { grid-template-columns: 1fr 1fr; }
+      .tier-table > div { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+      .tier-table > div:nth-child(4n) { border-right: 1px solid var(--border); }
+      .tier-table > div:nth-child(2n) { border-right: none; }
+      .tier-table > div:nth-last-child(-n+2) { border-bottom: none; }
+      .compat { grid-template-columns: 1fr; }
+      .prod-metric-inner { grid-template-columns: repeat(2, 1fr); gap: 1rem 0; }
+      .prod-metric { padding: 0.75rem 1rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+      .prod-metric:nth-child(2) { border-right: none; }
+      .prod-metric:nth-child(3), .prod-metric:nth-child(4) { border-bottom: none; }
+      .prod-metric:nth-child(3) { padding-left: 0; }
+      .wf-grid, .wf-axis { grid-template-columns: 110px 1fr 56px; }
+      .arch-svg { height: 620px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-slot"></div>
+
+<section class="prod-hero">
+  <div class="prod-hero-inner">
+    <div class="reveal">
+      <div class="crumb">
+        <a href="index.html" data-fr="Accueil" data-en="Home">Accueil</a>
+        <span class="sep">/</span>
+        <span class="cur" data-fr="Produit" data-en="Product">Produit</span>
+      </div>
+      <h1 data-html
+          data-fr="Un protocole, <em>trois couches</em>,<br>zéro boîte noire."
+          data-en="One protocol, <em>three layers</em>,<br>zero black box.">
+        Un protocole, <em>trois couches</em>,<br>zéro boîte noire.
+      </h1>
+      <p class="lead"
+        data-fr="Client → Orchestrateur → Réseau de GPU. Routing par niveau (Public · Trusted · HDS), routage géographique UE, chiffrement bout-en-bout. Compatibilité OpenAI stricte : aucun code à réécrire."
+        data-en="Client → Orchestrator → GPU network. Tier-aware routing (Public · Trusted · HDS), EU geographic routing, end-to-end encryption. Strict OpenAI compatibility: no code rewrite.">
+        Client → Orchestrateur → Réseau de GPU. Routing par niveau (Public · Trusted · HDS), routage géographique UE, chiffrement bout-en-bout. Compatibilité OpenAI stricte : aucun code à réécrire.
+      </p>
+      <div class="prod-hero-ctas">
+        <a href="docs.html" class="cta primary" data-fr="Lire les docs →" data-en="Read the docs →">Lire les docs →</a>
+        <a href="contact.html" class="cta ghost" data-fr="Parler à l'équipe" data-en="Talk to the team">Parler à l'équipe</a>
+      </div>
+    </div>
+
+    <aside class="routing-card reveal" aria-label="Last routing decision">
+      <div class="routing-card-header">
+        <span class="left" data-fr="DERNIÈRE DÉCISION DE ROUTING" data-en="LAST ROUTING DECISION">DERNIÈRE DÉCISION DE ROUTING</span>
+        <span class="badge">#a4c1·02</span>
+      </div>
+      <div class="rc-rows">
+        <div class="rc-row"><span class="lbl" data-fr="Tier demandé" data-en="Tier requested">Tier demandé</span><span class="val ok">TRUSTED</span></div>
+        <div class="rc-row"><span class="lbl" data-fr="Modèle" data-en="Model">Modèle</span><span class="val">mistral-large · Q4_K_M</span></div>
+        <div class="rc-row"><span class="lbl" data-fr="Node sélectionné" data-en="Selected node">Node sélectionné</span><span class="val blue">PAR-07</span></div>
+        <div class="rc-row"><span class="lbl" data-fr="Latence" data-en="Latency">Latence</span><span class="val">24 ms <span class="ok">▲</span></span></div>
+        <div class="rc-row"><span class="lbl" data-fr="Réputation" data-en="Reputation">Réputation</span><span class="val ok">0.96</span></div>
+        <div class="rc-row"><span class="lbl" data-fr="Résidence" data-en="Residency">Résidence</span><span class="val">FR · UE27</span></div>
+      </div>
+      <div class="rc-divider"></div>
+      <div class="rc-chain">
+        <span class="hop" data-fr="client" data-en="client">client</span>
+        <span class="arr">→</span>
+        <span class="hop">router·fr</span>
+        <span class="arr">→</span>
+        <span class="hop">PAR-07</span>
+        <span class="arr">→</span>
+        <span class="hop" data-fr="stream" data-en="stream">stream</span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Architecture" data-en="Architecture">Architecture</span>
+      <h2 data-fr="Trois couches. Un chemin de données." data-en="Three layers. One data path.">
+        Trois couches. Un chemin de données.
+      </h2>
+      <p data-fr="Votre SDK parle à l'orchestrateur, qui choisit un node sur critères mesurables (tier, latence, réputation, charge). Le node exécute et streame. Chaque hop est signé."
+         data-en="Your SDK talks to the orchestrator, which picks a node on measurable criteria (tier, latency, reputation, load). The node infers and streams. Every hop is signed.">
+        Votre SDK parle à l'orchestrateur, qui choisit un node sur critères mesurables (tier, latence, réputation, charge). Le node exécute et streame. Chaque hop est signé.
+      </p>
+    </div>
+    <div class="arch">
+      <div class="arch-svg-wrap">
+        <svg class="arch-svg" viewBox="0 0 1120 460" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="arcFlow" x1="0" x2="1">
+              <stop offset="0%" stop-color="#7EE787" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#7EE787" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#7EE787" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="arcFlowUp" x1="1" x2="0">
+              <stop offset="0%" stop-color="#6BB3FF" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#6BB3FF" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#6BB3FF" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Layer labels (left) -->
+          <text x="20" y="58"  class="arch-layer-label">01 · Client</text>
+          <text x="20" y="74"  class="arch-layer-sub">Your B2B app · OpenAI SDK</text>
+          <text x="20" y="208" class="arch-layer-label">02 · Orchestrator</text>
+          <text x="20" y="224" class="arch-layer-sub">Tier-aware router · policy engine</text>
+          <text x="20" y="358" class="arch-layer-label">03 · GPU network</text>
+          <text x="20" y="374" class="arch-layer-sub">HIA agent · LocalAI · open-weights</text>
+
+          <!-- Layer 1: Client -->
+          <rect x="240" y="36" width="860" height="70" rx="10" class="arch-lane-bg"/>
+          <g>
+            <rect x="270" y="54" width="130" height="36" rx="6" class="arch-node-box"/>
+            <text x="335" y="70" class="arch-node-text" text-anchor="middle">SDK OpenAI</text>
+            <text x="335" y="83" class="arch-node-sub" text-anchor="middle">chat · stream · embed</text>
+          </g>
+          <g>
+            <rect x="420" y="54" width="130" height="36" rx="6" class="arch-node-box"/>
+            <text x="485" y="70" class="arch-node-text" text-anchor="middle">baseURL</text>
+            <text x="485" y="83" class="arch-node-sub" text-anchor="middle">api.infera.eu/v1</text>
+          </g>
+          <g>
+            <rect x="570" y="54" width="130" height="36" rx="6" class="arch-node-box"/>
+            <text x="635" y="70" class="arch-node-text" text-anchor="middle">API key</text>
+            <text x="635" y="83" class="arch-node-sub" text-anchor="middle">mTLS · signed</text>
+          </g>
+          <g>
+            <rect x="720" y="54" width="130" height="36" rx="6" class="arch-node-box"/>
+            <text x="785" y="70" class="arch-node-text" text-anchor="middle">Stream in</text>
+            <text x="785" y="83" class="arch-node-sub" text-anchor="middle">SSE · chunked</text>
+          </g>
+          <g>
+            <rect x="870" y="54" width="210" height="36" rx="6" class="arch-node-box accent"/>
+            <text x="975" y="70" class="arch-node-text" text-anchor="middle" style="fill: var(--accent)">Compute receipt</text>
+            <text x="975" y="83" class="arch-node-sub" text-anchor="middle">signed envelope</text>
+          </g>
+
+          <!-- Layer 2: Orchestrator -->
+          <rect x="240" y="186" width="860" height="70" rx="10" class="arch-lane-bg"/>
+          <g>
+            <rect x="270" y="204" width="130" height="36" rx="6" class="arch-node-box accent"/>
+            <text x="335" y="220" class="arch-node-text" text-anchor="middle">Ingress</text>
+            <text x="335" y="233" class="arch-node-sub" text-anchor="middle">TLS 1.3 · mutual auth</text>
+          </g>
+          <g>
+            <rect x="420" y="204" width="130" height="36" rx="6" class="arch-node-box"/>
+            <text x="485" y="220" class="arch-node-text" text-anchor="middle">Tier filter</text>
+            <text x="485" y="233" class="arch-node-sub" text-anchor="middle">public · trusted · HDS</text>
+          </g>
+          <g>
+            <rect x="570" y="204" width="130" height="36" rx="6" class="arch-node-box"/>
+            <text x="635" y="220" class="arch-node-text" text-anchor="middle">Routing</text>
+            <text x="635" y="233" class="arch-node-sub" text-anchor="middle">lat · rep · load</text>
+          </g>
+          <g>
+            <rect x="720" y="204" width="130" height="36" rx="6" class="arch-node-box"/>
+            <text x="785" y="220" class="arch-node-text" text-anchor="middle">Dispatcher</text>
+            <text x="785" y="233" class="arch-node-sub" text-anchor="middle">signed job</text>
+          </g>
+          <g>
+            <rect x="870" y="204" width="210" height="36" rx="6" class="arch-node-box"/>
+            <text x="975" y="220" class="arch-node-text" text-anchor="middle">Metering &amp; failover</text>
+            <text x="975" y="233" class="arch-node-sub" text-anchor="middle">re-route on node drop</text>
+          </g>
+
+          <!-- Layer 3: GPU nodes -->
+          <rect x="240" y="336" width="860" height="86" rx="10" class="arch-lane-bg"/>
+          <!-- 6 node cells with city pins -->
+          <g>
+            <rect x="270" y="356" width="120" height="50" rx="8" class="arch-node-box"/>
+            <circle cx="290" cy="374" r="4" class="arch-packet"/>
+            <text x="305" y="378" class="arch-node-text">PAR-07</text>
+            <text x="305" y="394" class="arch-node-sub">RTX 4090 · FR</text>
+          </g>
+          <g>
+            <rect x="400" y="356" width="120" height="50" rx="8" class="arch-node-box"/>
+            <circle cx="420" cy="374" r="4" class="arch-packet"/>
+            <text x="435" y="378" class="arch-node-text">FRA-12</text>
+            <text x="435" y="394" class="arch-node-sub">H100 · DE</text>
+          </g>
+          <g>
+            <rect x="530" y="356" width="120" height="50" rx="8" class="arch-node-box"/>
+            <circle cx="550" cy="374" r="4" class="arch-packet"/>
+            <text x="565" y="378" class="arch-node-text">AMS-03</text>
+            <text x="565" y="394" class="arch-node-sub">A100 · NL</text>
+          </g>
+          <g>
+            <rect x="660" y="356" width="120" height="50" rx="8" class="arch-node-box"/>
+            <circle cx="680" cy="374" r="4" class="arch-packet" opacity="0.5"/>
+            <text x="695" y="378" class="arch-node-text">LON-09</text>
+            <text x="695" y="394" class="arch-node-sub">L40S · UK</text>
+          </g>
+          <g>
+            <rect x="790" y="356" width="120" height="50" rx="8" class="arch-node-box"/>
+            <circle cx="810" cy="374" r="4" class="arch-packet" opacity="0.5"/>
+            <text x="825" y="378" class="arch-node-text">BER-14</text>
+            <text x="825" y="394" class="arch-node-sub">RTX 4090 · DE</text>
+          </g>
+          <g>
+            <rect x="920" y="356" width="160" height="50" rx="8" class="arch-node-box"/>
+            <circle cx="940" cy="374" r="4" class="arch-packet" opacity="0.4"/>
+            <text x="955" y="378" class="arch-node-text">+1,279 more</text>
+            <text x="955" y="394" class="arch-node-sub">27 countries</text>
+          </g>
+
+          <!-- Flow lines: client ↓ orch ↓ nodes ↑ orch ↑ client -->
+          <line x1="335" y1="92"  x2="335" y2="202" class="arch-link"/>
+          <line x1="485" y1="92"  x2="485" y2="202" class="arch-link"/>
+          <line x1="635" y1="92"  x2="635" y2="202" class="arch-link"/>
+          <line x1="785" y1="92"  x2="785" y2="202" class="arch-link"/>
+          <line x1="975" y1="92"  x2="975" y2="202" class="arch-link"/>
+
+          <line x1="335" y1="242" x2="335" y2="352" class="arch-link"/>
+          <line x1="485" y1="242" x2="485" y2="352" class="arch-link"/>
+          <line x1="635" y1="242" x2="635" y2="352" class="arch-link"/>
+          <line x1="785" y1="242" x2="785" y2="352" class="arch-link"/>
+          <line x1="975" y1="242" x2="975" y2="352" class="arch-link"/>
+
+          <!-- Animated packets (downstream green, upstream blue) -->
+          <g>
+            <circle r="4" class="arch-packet">
+              <animateMotion dur="3.2s" repeatCount="indefinite"
+                path="M 335 72 L 335 220 L 335 380"/>
+            </circle>
+            <circle r="4" class="arch-packet" opacity="0.8">
+              <animateMotion dur="3.5s" repeatCount="indefinite" begin="0.8s"
+                path="M 485 72 L 485 220 L 565 380"/>
+            </circle>
+            <circle r="3.5" class="arch-packet" opacity="0.7">
+              <animateMotion dur="4s" repeatCount="indefinite" begin="1.6s"
+                path="M 635 72 L 635 220 L 435 380"/>
+            </circle>
+            <!-- Upstream -->
+            <circle r="3.5" fill="#6BB3FF" style="filter:drop-shadow(0 0 6px rgba(107,179,255,0.65))">
+              <animateMotion dur="3s" repeatCount="indefinite" begin="0.4s"
+                path="M 305 380 L 785 220 L 975 72"/>
+            </circle>
+            <circle r="3" fill="#6BB3FF" opacity="0.75" style="filter:drop-shadow(0 0 6px rgba(107,179,255,0.6))">
+              <animateMotion dur="3.4s" repeatCount="indefinite" begin="1.4s"
+                path="M 565 380 L 635 220 L 975 72"/>
+            </circle>
+          </g>
+
+          <!-- Pulsing ring on selected node PAR-07 -->
+          <circle cx="290" cy="374" r="6" class="arch-ring">
+            <animate attributeName="r" values="6;14;6" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Protocole · trace" data-en="Protocol · trace">Protocole · trace</span>
+      <h2 data-fr="Ce qui se passe en 28 millisecondes." data-en="What happens in 28 milliseconds.">
+        Ce qui se passe en 28 millisecondes.
+      </h2>
+      <p data-fr="Du TLS handshake au premier token streamé, chaque étape est signée, mesurée et facturée au cycle."
+         data-en="From TLS handshake to the first streamed token, every step is signed, measured and billed per cycle.">
+        Du TLS handshake au premier token streamé, chaque étape est signée, mesurée et facturée au cycle.
+      </p>
+    </div>
+
+    <div class="waterfall">
+      <div class="waterfall-header">
+        <span class="title">INFERENCE · mistral-large · trusted</span>
+        <span class="total" data-fr="Total TTFT · 28 ms" data-en="Total TTFT · 28 ms">Total TTFT · 28 ms</span>
+      </div>
+      <div class="wf-grid">
+        <div class="wf-label">TLS handshake
+          <span class="sub" data-fr="Mutual auth, TLS 1.3" data-en="Mutual auth, TLS 1.3">Mutual auth, TLS 1.3</span>
+        </div>
+        <div class="wf-bar-track"><div class="wf-bar" style="left:0%; width:7%; --bar-c:#6BB3FF;"></div></div>
+        <div class="wf-ms">0 – 2 ms</div>
+
+        <div class="wf-label" data-fr-attr='{"title":"Filtrage par tier et critères"}'>Tier filter
+          <span class="sub" data-fr="KYC + réputation ≥ 0.92" data-en="KYC + reputation ≥ 0.92">KYC + réputation ≥ 0.92</span>
+        </div>
+        <div class="wf-bar-track"><div class="wf-bar" style="left:7%; width:7%; --bar-c:#6BB3FF;"></div></div>
+        <div class="wf-ms">2 – 4 ms</div>
+
+        <div class="wf-label">Dispatch
+          <span class="sub" data-fr="Job envelope signé + contexte chiffré" data-en="Signed job envelope + encrypted context">Job envelope signé + contexte chiffré</span>
+        </div>
+        <div class="wf-bar-track"><div class="wf-bar" style="left:14%; width:7%; --bar-c:#FFB86B;"></div></div>
+        <div class="wf-ms">4 – 6 ms</div>
+
+        <div class="wf-label">Inference
+          <span class="sub" data-fr="LocalAI · Q4_K_M · GPU node" data-en="LocalAI · Q4_K_M · GPU node">LocalAI · Q4_K_M · GPU node</span>
+        </div>
+        <div class="wf-bar-track"><div class="wf-bar" style="left:21%; width:71%; --bar-c:#7EE787;"></div></div>
+        <div class="wf-ms">6 – 26 ms</div>
+
+        <div class="wf-label">Stream return
+          <span class="sub" data-fr="SSE + compute receipt" data-en="SSE + compute receipt">SSE + compute receipt</span>
+        </div>
+        <div class="wf-bar-track"><div class="wf-bar" style="left:92%; width:7%; --bar-c:#B5F5B9;"></div></div>
+        <div class="wf-ms">26 – 28 ms</div>
+      </div>
+      <div class="wf-axis">
+        <div></div>
+        <div class="wf-axis-inner">
+          <span class="wf-tick" style="left:0%">0</span>
+          <span class="wf-tick" style="left:25%">7</span>
+          <span class="wf-tick" style="left:50%">14</span>
+          <span class="wf-tick" style="left:75%">21</span>
+          <span class="wf-tick" style="left:100%">28 ms</span>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Niveaux de grid" data-en="Grid tiers">Niveaux de grid</span>
+      <h2 data-fr="Trois niveaux. Un même SDK." data-en="Three tiers. Same SDK.">
+        Trois niveaux. Un même SDK.
+      </h2>
+      <p data-fr="Changez un header — tier=public|trusted|hds — et les contraintes de routing, de résidence et d'attestation s'appliquent automatiquement."
+         data-en="Change one header — tier=public|trusted|hds — and routing, residency and attestation constraints apply automatically.">
+        Changez un header — tier=public|trusted|hds — et les contraintes de routing, de résidence et d'attestation s'appliquent automatiquement.
+      </p>
+    </div>
+
+    <div class="tier-table">
+      <div class="tier-head" data-fr="Garantie" data-en="Guarantee">Garantie</div>
+      <div class="tier-head">Public</div>
+      <div class="tier-head tier-rec">Trusted <span style="opacity:0.6">· rec.</span></div>
+      <div class="tier-head">HDS</div>
+
+      <div class="tier-row-key">SLA
+        <span class="desc" data-fr="Disponibilité contractuelle" data-en="Contractual uptime">Disponibilité contractuelle</span>
+      </div>
+      <div class="tier-val">98.0%</div>
+      <div class="tier-val tier-rec-col" style="color:var(--accent)">99.5%</div>
+      <div class="tier-val">99.95%</div>
+
+      <div class="tier-row-key" data-fr-attr='{}'>Résidence
+        <span class="desc" data-fr="Où les données sont traitées" data-en="Where data is processed">Où les données sont traitées</span>
+      </div>
+      <div class="tier-val" data-fr="UE" data-en="EU">UE</div>
+      <div class="tier-val tier-rec-col" data-fr="UE27 uniquement" data-en="EU27 only">UE27 uniquement</div>
+      <div class="tier-val" data-fr="FR · DE · NL" data-en="FR · DE · NL">FR · DE · NL</div>
+
+      <div class="tier-row-key">Attestation
+        <span class="desc" data-fr="Preuve cryptographique du node" data-en="Cryptographic node attestation">Preuve cryptographique du node</span>
+      </div>
+      <div class="tier-dash">—</div>
+      <div class="tier-check tier-rec-col">✓ TPM 2.0</div>
+      <div class="tier-check">✓ TPM + SEV-SNP</div>
+
+      <div class="tier-row-key">KYC opérateur
+        <span class="desc" data-fr="Vérification identité fournisseur" data-en="Provider identity check">Vérification identité fournisseur</span>
+      </div>
+      <div class="tier-dash">—</div>
+      <div class="tier-check tier-rec-col">✓</div>
+      <div class="tier-check">✓ + SIRET</div>
+
+      <div class="tier-row-key">Audit log
+        <span class="desc" data-fr="Rétention et export" data-en="Retention &amp; export">Rétention et export</span>
+      </div>
+      <div class="tier-val" data-fr="7 j" data-en="7 d">7 j</div>
+      <div class="tier-val tier-rec-col" data-fr="90 j · export JSON" data-en="90 d · JSON export">90 j · export JSON</div>
+      <div class="tier-val" data-fr="10 ans · export signé" data-en="10 yr · signed export">10 ans · export signé</div>
+
+      <div class="tier-row-key">Compliance</div>
+      <div class="tier-val">RGPD</div>
+      <div class="tier-val tier-rec-col">RGPD · SecNumCloud</div>
+      <div class="tier-val">HDS · ISO 27001</div>
+
+      <div class="tier-row-key" data-fr="Prix · 1M tokens" data-en="Price · 1M tokens">Prix · 1M tokens
+        <span class="desc" data-fr="Llama-3 70B · indicatif" data-en="Llama-3 70B · indicative">Llama-3 70B · indicatif</span>
+      </div>
+      <div class="tier-val">0,85 €</div>
+      <div class="tier-val tier-rec-col" style="color:var(--accent)">1,05 €</div>
+      <div class="tier-val">1,80 €</div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Compatibilité OpenAI" data-en="OpenAI compatibility">Compatibilité OpenAI</span>
+      <h2 data-fr="Drop-in strict. Aucune ligne à réécrire." data-en="Strict drop-in. Zero rewrites.">
+        Drop-in strict. Aucune ligne à réécrire.
+      </h2>
+      <p data-fr="Parité API sur tout ce qui compte : chat, embeddings, streaming, function calls, vision, moderation."
+         data-en="API parity on everything that matters: chat, embeddings, streaming, function calls, vision, moderation.">
+        Parité API sur tout ce qui compte : chat, embeddings, streaming, function calls, vision, moderation.
+      </p>
+    </div>
+
+    <div class="compat">
+      <div class="compat-item">
+        <div class="head">ENDPOINT <span class="check">✓</span></div>
+        <div class="name">/v1/chat/completions</div>
+        <div class="note" data-fr="Streaming SSE, multi-tour, system prompts, role messages." data-en="SSE streaming, multi-turn, system prompts, role messages.">Streaming SSE, multi-tour, system prompts, role messages.</div>
+      </div>
+      <div class="compat-item">
+        <div class="head">ENDPOINT <span class="check">✓</span></div>
+        <div class="name">/v1/embeddings</div>
+        <div class="note" data-fr="BGE-M3, E5-large, Nomic. Float32 et binaire." data-en="BGE-M3, E5-large, Nomic. Float32 and binary.">BGE-M3, E5-large, Nomic. Float32 et binaire.</div>
+      </div>
+      <div class="compat-item">
+        <div class="head">FEATURE <span class="check">✓</span></div>
+        <div class="name" data-fr="Function calling" data-en="Function calling">Function calling</div>
+        <div class="note" data-fr="Schémas JSON stricts, parallel tool calls, tool_choice." data-en="Strict JSON schemas, parallel tool calls, tool_choice.">Schémas JSON stricts, parallel tool calls, tool_choice.</div>
+      </div>
+      <div class="compat-item">
+        <div class="head">FEATURE <span class="check">✓</span></div>
+        <div class="name">Vision</div>
+        <div class="note" data-fr="Pixtral, LLaVA. Images inline ou URL signée." data-en="Pixtral, LLaVA. Inline images or signed URL.">Pixtral, LLaVA. Images inline ou URL signée.</div>
+      </div>
+      <div class="compat-item">
+        <div class="head">FEATURE <span class="check">✓</span></div>
+        <div class="name">Logprobs &amp; top_logprobs</div>
+        <div class="note" data-fr="Utile pour RAG, scoring, calibration de confiance." data-en="Useful for RAG, scoring, confidence calibration.">Utile pour RAG, scoring, calibration de confiance.</div>
+      </div>
+      <div class="compat-item">
+        <div class="head">HEADER <span class="check">✓</span></div>
+        <div class="name">x-infera-tier</div>
+        <div class="note" data-fr="Seul ajout. public · trusted · hds." data-en="Only addition. public · trusted · hds.">Seul ajout. public · trusted · hds.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Code" data-en="Code">Code</span>
+      <h2 data-fr="Une seule ligne change." data-en="One line changes.">Une seule ligne change.</h2>
+    </div>
+    <div class="code-block">
+      <div class="code-head">
+        <span>client.ts · TypeScript</span>
+        <span class="code-dots"><span></span><span></span><span></span></span>
+      </div>
+<pre class="code-body"><span class="c">// Drop-in from OpenAI SDK — only baseURL &amp; tier change</span>
+<span class="k">import</span> OpenAI <span class="k">from</span> <span class="s">"openai"</span>;
+
+<span class="k">const</span> client = <span class="k">new</span> <span class="p">OpenAI</span>({
+  baseURL: <span class="s">"https://api.infera.eu/v1"</span>,
+  apiKey : process.env.<span class="p">INFERA_API_KEY</span>,
+  defaultHeaders: { <span class="s">"x-infera-tier"</span>: <span class="s">"trusted"</span> },
+});
+
+<span class="k">const</span> stream = <span class="k">await</span> client.chat.completions.<span class="p">create</span>({
+  model: <span class="s">"mistral-large"</span>,
+  stream: <span class="n">true</span>,
+  messages: [{ role: <span class="s">"user"</span>, content: <span class="s">"Bonjour, Europe."</span> }],
+});
+
+<span class="k">for await</span> (<span class="k">const</span> part <span class="k">of</span> stream) {
+  process.stdout.<span class="p">write</span>(part.choices[<span class="n">0</span>].delta.content ?? <span class="s">""</span>);
+}</pre>
+    </div>
+  </section>
+
+  <div class="prod-metric-bar reveal">
+    <div class="prod-metric-inner">
+      <div class="prod-metric">
+        <div class="prod-metric-label" data-fr="TTFT médian" data-en="Median TTFT">TTFT médian</div>
+        <div class="prod-metric-num"><em>28 ms</em></div>
+        <div class="prod-metric-sub" data-fr="p50 · tier trusted · 30j" data-en="p50 · trusted tier · 30d">p50 · tier trusted · 30j</div>
+      </div>
+      <div class="prod-metric">
+        <div class="prod-metric-label" data-fr="SLA contractuel" data-en="Contractual SLA">SLA contractuel</div>
+        <div class="prod-metric-num">99.5%</div>
+        <div class="prod-metric-sub" data-fr="Trusted · glissant 30j" data-en="Trusted · rolling 30d">Trusted · glissant 30j</div>
+      </div>
+      <div class="prod-metric">
+        <div class="prod-metric-label" data-fr="Chiffrement" data-en="Encryption">Chiffrement</div>
+        <div class="prod-metric-num">E2E</div>
+        <div class="prod-metric-sub" data-fr="Clés gérées client · mTLS" data-en="Client-held keys · mTLS">Clés gérées client · mTLS</div>
+      </div>
+      <div class="prod-metric">
+        <div class="prod-metric-label" data-fr="Résidence données" data-en="Data residency">Résidence données</div>
+        <div class="prod-metric-num">UE27</div>
+        <div class="prod-metric-sub" data-fr="Jamais hors Europe" data-en="Never leaves Europe">Jamais hors Europe</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<section class="waitlist">
+  <div class="wrap waitlist-inner reveal">
+    <h2 data-fr="Prêt à intégrer ?" data-en="Ready to integrate?">Prêt à intégrer ?</h2>
+    <p data-fr="30 secondes pour changer la baseURL. Accompagnement beta pour les équipes B2B."
+       data-en="30 seconds to change the baseURL. Hands-on onboarding for B2B teams.">
+      30 secondes pour changer la baseURL. Accompagnement beta pour les équipes B2B.
+    </p>
+    <a href="contact.html" class="cta" data-fr="Contacter l'équipe →" data-en="Contact the team →">Contacter l'équipe →</a>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="partials.js"></script>
+<script src="shared.js"></script>
+<script>
+  mount('product');
+</script>
+</body>
+</html>

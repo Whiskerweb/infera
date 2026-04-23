@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clients — Infera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+
+<div id="nav-slot"></div>
+
+<div class="wrap">
+
+  <section class="page-head reveal">
+    <div class="crumb">
+      <a href="index.html" data-fr="Accueil" data-en="Home">Accueil</a>
+      <span class="sep">/</span>
+      <span class="cur" data-fr="Clients" data-en="Clients">Clients</span>
+    </div>
+    <h1 data-fr="Basculez vos requêtes IA sans réécrire une ligne."
+        data-en="Redirect your AI calls without rewriting a line.">
+      Basculez vos requêtes IA sans réécrire une ligne.
+    </h1>
+    <p class="lead"
+      data-fr="Compatibilité OpenAI stricte : /chat/completions, /embeddings, /models. Streams, function calls, vision — tout fonctionne tel quel."
+      data-en="Strict OpenAI compatibility: /chat/completions, /embeddings, /models. Streams, function calls, vision — everything works as-is.">
+      Compatibilité OpenAI stricte : /chat/completions, /embeddings, /models. Streams, function calls, vision — tout fonctionne tel quel.
+    </p>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Intégration" data-en="Integration">Intégration</span>
+      <h2 data-fr="Une variable d'environnement." data-en="One env variable.">
+        Une variable d'environnement.
+      </h2>
+    </div>
+    <div class="code-block">
+      <div class="code-head">
+        <span>python · node · curl</span>
+        <span class="code-dots"><span></span><span></span><span></span></span>
+      </div>
+<pre class="code-body"><span class="c"># Python</span>
+<span class="k">from</span> openai <span class="k">import</span> OpenAI
+client = <span class="p">OpenAI</span>(
+  base_url=<span class="s">"https://api.infera.eu/v1"</span>,
+  api_key=os.environ[<span class="s">"INFERA_API_KEY"</span>],
+)
+
+<span class="c"># Node.js</span>
+<span class="k">import</span> OpenAI <span class="k">from</span> <span class="s">"openai"</span>;
+<span class="k">const</span> client = <span class="k">new</span> <span class="p">OpenAI</span>({ baseURL: <span class="s">"https://api.infera.eu/v1"</span> });
+
+<span class="c"># curl — identique à OpenAI</span>
+$ curl https://api.infera.eu/v1/chat/completions \
+    -H <span class="s">"Authorization: Bearer $INFERA_API_KEY"</span> \
+    -H <span class="s">"Content-Type: application/json"</span> \
+    -d <span class="s">'{"model":"mistral-large","messages":[{"role":"user","content":"Bonjour"}]}'</span></pre>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Modèles" data-en="Models">Modèles</span>
+      <h2 data-fr="Open-weight, au plus près de l'état de l'art."
+          data-en="Open-weight, close to state of the art.">
+        Open-weight, au plus près de l'état de l'art.
+      </h2>
+      <p data-fr="Catalogue mis à jour en continu. Précisions quantisées disponibles pour chaque modèle."
+         data-en="Catalog continuously updated. Quantized precisions available for each model.">
+        Catalogue mis à jour en continu. Précisions quantisées disponibles pour chaque modèle.
+      </p>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-num" style="font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-dim); margin-bottom:0.75rem;">MISTRAL</div>
+        <h3 style="font-size:1.1rem; margin-bottom:0.3rem;">mistral-large · 8×22B</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.55;">Mixture of experts, contexte 128k, multilingue natif. Référence sur raisonnement FR.</p>
+      </div>
+      <div class="card">
+        <div class="card-num" style="font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-dim); margin-bottom:0.75rem;">META</div>
+        <h3 style="font-size:1.1rem; margin-bottom:0.3rem;">llama-3.3 · 70B</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.55;">Tool use natif, function calling stable. Excellent sur tâches code et analyse.</p>
+      </div>
+      <div class="card">
+        <div class="card-num" style="font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-dim); margin-bottom:0.75rem;">DEEPSEEK</div>
+        <h3 style="font-size:1.1rem; margin-bottom:0.3rem;">deepseek-v3 · 671B</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.55;">MoE extrême, raisonnement long. Idéal pour agents complexes et code.</p>
+      </div>
+      <div class="card">
+        <div class="card-num" style="font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-dim); margin-bottom:0.75rem;">ALIBABA</div>
+        <h3 style="font-size:1.1rem; margin-bottom:0.3rem;">qwen-2.5 · 72B</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.55;">Contexte 1M, excellent français, bonne vision. Option multilingue robuste.</p>
+      </div>
+      <div class="card">
+        <div class="card-num" style="font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-dim); margin-bottom:0.75rem;">EMBEDDINGS</div>
+        <h3 style="font-size:1.1rem; margin-bottom:0.3rem;">nomic-embed · v1.5</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.55;">768-dim, licence Apache, très performant sur retrieval multilingue.</p>
+      </div>
+      <div class="card">
+        <div class="card-num" style="font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-dim); margin-bottom:0.75rem;">VISION</div>
+        <h3 style="font-size:1.1rem; margin-bottom:0.3rem;">pixtral-large · 124B</h3>
+        <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.55;">Vision + texte, contexte 128k. Parfait pour OCR et compréhension de doc.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Cas d'usage" data-en="Use cases">Cas d'usage</span>
+      <h2 data-fr="Ce que nos clients beta font déjà." data-en="What beta clients are already doing.">
+        Ce que nos clients beta font déjà.
+      </h2>
+    </div>
+    <div class="grid-3">
+      <div class="feature">
+        <div class="feature-icon">ℛ</div>
+        <h3>RAG interne régulé</h3>
+        <p>Retrieval sur corpus juridique / RH sans exposer un token hors UE. Niveau Trusted, embeddings chiffrés.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⌘</div>
+        <h3>Assistants métier</h3>
+        <p>Copilotes pour équipes support, commerce, finance. Compatible function-calling, outils maison branchables.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚕</div>
+        <h3>Médical &amp; santé</h3>
+        <p>Génération de synthèses cliniques, aide à la codification. Exclusivement niveau HDS, audit trail complet.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<section class="waitlist">
+  <div class="wrap waitlist-inner reveal">
+    <h2 data-fr="Migrer sa stack ?" data-en="Migrate your stack?">Migrer sa stack ?</h2>
+    <p data-fr="Une équipe dédiée vous aide à qualifier la bascule. Réunions techniques sur demande."
+       data-en="A dedicated team helps qualify the switch. Technical calls on demand.">
+      Une équipe dédiée vous aide à qualifier la bascule. Réunions techniques sur demande.
+    </p>
+    <a href="contact.html" class="cta" data-fr="Planifier un call →" data-en="Book a call →">Planifier un call →</a>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+<script src="partials.js"></script>
+<script src="shared.js"></script>
+<script>mount('clients');</script>
+</body>
+</html>

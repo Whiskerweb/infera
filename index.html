@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infera — Sovereign AI cloud, in motion</title>
+  <meta name="description" content="Le cloud d'IA P2P, souverain, décentralisé, économique et écologique. API compatible OpenAI, résiliente par nature.">
+  <meta name="theme-color" content="#0A0A0B">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230A0A0B'/%3E%3Ccircle cx='16' cy='32' r='4' fill='%237EE787'/%3E%3Ccircle cx='32' cy='16' r='4' fill='%237EE787'/%3E%3Ccircle cx='32' cy='48' r='4' fill='%237EE787'/%3E%3Ccircle cx='48' cy='32' r='4' fill='%237EE787'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23E8F2FF'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="home.css">
+  <style>
+    /* ======= HERO REDESIGN — full-bleed cinematic globe ======= */
+    .hero-cinematic {
+      position: relative;
+      min-height: 92vh;
+      margin: -1px -2rem 0;
+      padding: 0;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 68% 42%, #0F1216 0%, #0A0B0D 60%, #07080A 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    #globeStage {
+      position: absolute; inset: 0;
+      display: block;
+      z-index: 0;
+    }
+    .hero-vignette {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 42% 55% at 14% 50%, rgba(10,11,13,0.72), rgba(10,11,13,0) 75%),
+        linear-gradient(180deg, rgba(10,11,13,0.12), rgba(10,11,13,0) 22%, rgba(10,11,13,0) 70%, rgba(10,11,13,0.85) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero-grid-overlay {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 88px 100%;
+      pointer-events: none;
+      z-index: 1;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.4), transparent 50%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 5.5rem 2rem 2rem;
+      display: grid;
+      grid-template-columns: minmax(0, 620px) 1fr;
+      align-items: end;
+      gap: 3rem;
+      flex: 1;
+    }
+    .hero-copy { align-self: center; }
+    .hero-copy .eyebrow { margin-bottom: 1.75rem; }
+    .hero-copy h1 {
+      font-size: clamp(2.6rem, 5.8vw, 4.75rem);
+      font-weight: 700;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      margin: 0 0 1.75rem;
+      color: var(--text);
+      background: linear-gradient(180deg, #ffffff 40%, #a8adb7);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+    }
+    .hero-copy h1 em {
+      font-style: normal;
+      display: inline;
+      background: linear-gradient(90deg, var(--accent) 0%, #B5F5B9 50%, var(--blue) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      position: relative;
+    }
+    .hero-copy .hero-desc {
+      font-size: 1.14rem;
+      color: #b4bac4;
+      max-width: 520px;
+      line-height: 1.55;
+      margin: 0 0 2.25rem;
+    }
+    .hero-ctas { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+    .hero-cta-primary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.95rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.95rem; font-weight: 600;
+      background: var(--accent);
+      color: #0A1A10;
+      border: 1px solid var(--accent);
+      box-shadow: 0 10px 30px rgba(126,231,135,0.3), inset 0 0 0 1px rgba(255,255,255,0.12);
+      transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+    }
+    .hero-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(126,231,135,0.45), inset 0 0 0 1px rgba(255,255,255,0.2); }
+    .hero-cta-ghost {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.95rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.95rem; font-weight: 500;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+    .hero-cta-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.3); }
+
+    /* Floating glass telemetry card — right side */
+    .telemetry {
+      position: relative;
+      align-self: end;
+      margin-bottom: 2rem;
+      padding: 1.25rem 1.35rem;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(22,26,32,0.7), rgba(14,16,20,0.55));
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+      max-width: 340px;
+      justify-self: end;
+    }
+    .telemetry-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .telemetry-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; color: var(--text);
+      text-transform: uppercase; letter-spacing: 0.14em;
+      display: inline-flex; align-items: center; gap: 0.55rem;
+    }
+    .telemetry-title::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 10px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .telemetry-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .telemetry-rows {
+      display: grid; gap: 0.5rem;
+    }
+    .telemetry-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .telemetry-row .lbl { color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.68rem; }
+    .telemetry-row .val { color: var(--text); font-weight: 500; font-variant-numeric: tabular-nums; }
+    .telemetry-row .val .accent { color: var(--accent); }
+    .telemetry-sparkline {
+      margin-top: 0.75rem;
+      height: 28px;
+      display: block;
+    }
+    .telemetry-feed {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex; flex-direction: column; gap: 0.35rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      max-height: 52px; overflow: hidden;
+    }
+    .telemetry-feed-line { opacity: 0; animation: feedIn 0.4s var(--ease) forwards; }
+    .telemetry-feed-line .ok { color: var(--accent); }
+    .telemetry-feed-line .route { color: var(--blue); }
+    @keyframes feedIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    /* Metrics bar — replaces the old rectangle, sits at hero bottom */
+    .hero-footer {
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,11,13,0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .hero-footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 1.5rem 2rem;
+    }
+    .hero-metric {
+      padding: 0 1.75rem;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .hero-metric:first-child { padding-left: 0; }
+    .hero-metric:last-child { border-right: none; }
+    .hero-metric-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 0.4rem;
+    }
+    .hero-metric-num {
+      font-size: 1.75rem; font-weight: 600;
+      letter-spacing: -0.02em; color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .hero-metric-num em { font-style: normal; color: var(--accent); }
+    .hero-metric-sub { font-size: 0.74rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+    @media (max-width: 900px) {
+      .hero-cinematic { min-height: auto; }
+      .hero-content { grid-template-columns: 1fr; padding: 3rem 1.25rem 1.5rem; gap: 2rem; }
+      .telemetry { max-width: 100%; justify-self: stretch; margin-bottom: 0; }
+      .hero-footer-inner { grid-template-columns: repeat(2, 1fr); gap: 1rem 0; }
+      .hero-metric { padding: 0.75rem 1rem; border-right: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .hero-metric:nth-child(2) { border-right: none; }
+      .hero-metric:nth-child(3), .hero-metric:nth-child(4) { border-bottom: none; }
+      .hero-metric:nth-child(3) { padding-left: 0; }
+      #globeStage { opacity: 0.55; }
+    }
+
+    /* ======= DUALITY SECTION — two ways in ======= */
+    .duality {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #0D1014, #0A0B0D);
+      overflow: hidden;
+      position: relative;
+    }
+    .duality::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
+    }
+
+    .duality-header {
+      position: relative; z-index: 1;
+      padding: 3.5rem 3rem 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .duality-header .tag { margin-bottom: 1.25rem; }
+    .duality-header h2 {
+      font-size: clamp(2rem, 4.6vw, 3.25rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.04;
+      margin: 0 auto 2rem;
+      max-width: 820px;
+    }
+    .duality-header h2 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--accent), #B5F5B9);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+    }
+
+    /* Segmented switch */
+    .duality-switch {
+      position: relative;
+      display: inline-flex;
+      padding: 4px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--bg-elev);
+    }
+    .duality-switch button {
+      position: relative;
+      z-index: 1;
+      padding: 0.6rem 1.6rem;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 999px;
+      transition: color 0.3s var(--ease);
+    }
+    .duality-switch button.active { color: #0A1A10; }
+    .duality-switch-indicator {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      height: calc(100% - 8px);
+      width: 50%;
+      border-radius: 999px;
+      background: var(--accent);
+      transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+      z-index: 0;
+    }
+    .duality-switch[data-active="client"] .duality-switch-indicator { transform: translateX(100%); }
+
+    /* Stage */
+    .duality-stage {
+      position: relative;
+      z-index: 1;
+      min-height: 520px;
+    }
+    .duality-panel {
+      position: absolute; inset: 0;
+      padding: 3rem;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+    }
+    .duality-panel.active {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+    .duality-panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 3rem;
+      align-items: start;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .duality-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(3.5rem, 7vw, 5.5rem);
+      font-weight: 500;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(126,231,135,0.35);
+      margin-bottom: 0.75rem;
+    }
+    .duality-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--accent);
+      letter-spacing: 0.22em;
+      margin-bottom: 1.25rem;
+    }
+    .duality-panel-left h3 {
+      font-size: clamp(1.5rem, 2.6vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin: 0 0 1.25rem;
+      color: var(--text);
+    }
+    .duality-panel-left p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0 0 1.75rem;
+      max-width: 480px;
+    }
+    .duality-bullets {
+      list-style: none; padding: 0; margin: 0 0 2rem;
+      display: flex; flex-direction: column; gap: 0.15rem;
+    }
+    .duality-bullets li {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      align-items: baseline;
+      padding: 0.85rem 0;
+      border-top: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+    .duality-bullets li:last-child { border-bottom: 1px solid var(--border); }
+    .duality-bullets .bullet-k {
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .duality-bullets .bullet-v {
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+    }
+    .duality-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 0.98rem;
+      transition: gap 0.25s var(--ease);
+    }
+    .duality-cta:hover { gap: 0.8rem; }
+
+    /* Right column visuals */
+    .duality-panel-right {
+      display: grid; gap: 1rem;
+    }
+    .duality-term, .duality-diff {
+      background: #07090B;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .duality-term-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.55rem 0.85rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      color: var(--text-dim);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .duality-term-body, .duality-diff-body {
+      padding: 1rem 1.1rem;
+      white-space: pre;
+      line-height: 1.65;
+      color: var(--text);
+      overflow-x: auto;
+    }
+    .duality-term-body .c { color: var(--text-dim); }
+    .duality-term-body .k { color: #FF9BB3; }
+    .duality-term-body .s { color: var(--accent); }
+    .duality-term-body .ok { color: var(--accent); }
+    .duality-term-body .accent { color: var(--accent); font-weight: 500; }
+
+    .duality-diff-body .diff-minus {
+      display: block;
+      background: rgba(255,100,120,0.06);
+      color: #FF9BB3;
+      margin: 0 -1.1rem;
+      padding: 0 1.1rem;
+    }
+    .duality-diff-body .diff-plus {
+      display: block;
+      background: rgba(126,231,135,0.08);
+      color: var(--accent);
+      margin: 0 -1.1rem;
+      padding: 0 1.1rem;
+    }
+    .duality-diff-body .diff-plus .s { color: #B5F5B9; font-weight: 500; }
+    .duality-diff-body .c { color: var(--text-dim); }
+    .duality-diff-flash {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(126,231,135,0.2), transparent);
+      transform: translateX(-100%);
+      animation: diffFlash 4s ease-in-out infinite;
+    }
+    @keyframes diffFlash {
+      0%, 60% { transform: translateX(-100%); }
+      75% { transform: translateX(100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Ticker (earnings) */
+    .duality-ticker {
+      padding: 1.1rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      display: grid;
+      grid-template-columns: 1fr 220px auto;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .duality-ticker-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      line-height: 1.3;
+    }
+    .duality-ticker-graph svg { width: 100%; height: 52px; display: block; }
+    .duality-ticker-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Cost comparison */
+    .duality-compare {
+      padding: 1.25rem 1.25rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+    .duality-compare-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+    .duality-compare-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 0.65rem;
+    }
+    .duality-compare-row:last-child { margin-bottom: 0; }
+    .duality-compare-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .duality-compare-key--us { color: var(--accent); font-weight: 500; }
+    .duality-compare-bar {
+      position: relative;
+      height: 28px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.03);
+      overflow: hidden;
+    }
+    .duality-compare-bar::before {
+      content: "";
+      position: absolute; inset: 0;
+      width: var(--w, 0);
+      background: var(--c, var(--accent));
+      opacity: 0.2;
+      border-right: 2px solid var(--c, var(--accent));
+      transform-origin: left;
+      animation: barGrow 0.9s cubic-bezier(0.65,0,0.35,1) forwards;
+    }
+    .duality-compare-bar--us::before { opacity: 0.3; }
+    .duality-compare-bar span {
+      position: relative; z-index: 1;
+      display: inline-block;
+      padding: 0 0.65rem;
+      line-height: 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+    @keyframes barGrow {
+      from { width: 0; }
+      to { width: var(--w); }
+    }
+
+    @media (max-width: 900px) {
+      .duality-header { padding: 2.5rem 1.25rem 2rem; }
+      .duality-panel { padding: 2rem 1.25rem; position: relative; inset: auto; }
+      .duality-panel:not(.active) { display: none; }
+      .duality-panel-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .duality-ticker { grid-template-columns: 1fr; gap: 0.5rem; }
+      .duality-ticker-graph { order: 3; }
+      .duality-stage { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-slot"></div>
+
+<div class="wrap">
+
+  <section class="hero-cinematic">
+    <canvas id="globeStage"></canvas>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-vignette"></div>
+
+    <div class="hero-content">
+      <div class="hero-copy">
+        <span class="eyebrow eyebrow-dot"
+          data-fr="Beta privée · Grid UE"
+          data-en="Private beta · EU Grid">Beta privée · Grid UE</span>
+        <h1 data-html data-fr="Le cloud d'IA <em>souverain</em>,<br>décentralisé et en mouvement."
+             data-en="The <em>sovereign</em> AI cloud,<br>decentralized and in motion.">
+          Le cloud d'IA <em>souverain</em>,<br>décentralisé et en mouvement.
+        </h1>
+        <p class="hero-desc"
+          data-fr="La puissance de calcul sous-utilisée d'Europe, remise au travail pour une IA sobre et souveraine. API P2P compatible OpenAI, résiliente par nature."
+          data-en="Europe's underused compute, put back to work for a sober, sovereign AI. OpenAI-compatible P2P API, resilient by design.">
+          La puissance de calcul sous-utilisée d'Europe, remise au travail pour une IA sobre et souveraine. API P2P compatible OpenAI, résiliente par nature.
+        </p>
+        <div class="hero-ctas">
+          <a href="contact.html" class="hero-cta-primary" data-fr="Rejoindre la beta →" data-en="Join the beta →">Rejoindre la beta →</a>
+          <a href="product.html" class="hero-cta-ghost" data-fr="Voir l'architecture" data-en="See the architecture">Voir l'architecture</a>
+        </div>
+      </div>
+
+      <aside class="telemetry" aria-label="Live telemetry">
+        <div class="telemetry-header">
+          <span class="telemetry-title">EU GRID · LIVE</span>
+          <span class="telemetry-status">OPERATIONAL</span>
+        </div>
+        <div class="telemetry-rows">
+          <div class="telemetry-row"><span class="lbl">Nodes</span><span class="val" id="t-nodes">1,284</span></div>
+          <div class="telemetry-row"><span class="lbl">In-flight</span><span class="val" id="t-flight">312 <span class="accent">▲</span></span></div>
+          <div class="telemetry-row"><span class="lbl">Latency p50</span><span class="val" id="t-lat">28 ms</span></div>
+          <div class="telemetry-row"><span class="lbl">Throughput</span><span class="val" id="t-tps">48.2k tok/s</span></div>
+        </div>
+        <svg class="telemetry-sparkline" viewBox="0 0 200 28" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sparkGrad" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#7EE787" stop-opacity="0.45"/>
+              <stop offset="100%" stop-color="#7EE787" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path id="sparkArea" d="" fill="url(#sparkGrad)"/>
+          <path id="sparkLine" d="" fill="none" stroke="#7EE787" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+        <div class="telemetry-feed" id="t-feed"></div>
+      </aside>
+    </div>
+
+    <div class="hero-footer">
+      <div class="hero-footer-inner">
+        <div class="hero-metric">
+          <div class="hero-metric-label" data-fr="Nodes actifs" data-en="Active nodes">Nodes actifs</div>
+          <div class="hero-metric-num">1,284</div>
+          <div class="hero-metric-sub" data-fr="27 pays · UE27" data-en="27 countries · EU27">27 pays · UE27</div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-label" data-fr="Coût vs hyperscalers" data-en="Cost vs hyperscalers">Coût vs hyperscalers</div>
+          <div class="hero-metric-num"><em>−60%</em></div>
+          <div class="hero-metric-sub" data-fr="Médian · modèles équivalents" data-en="Median · equivalent models">Médian · modèles équivalents</div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-label" data-fr="Niveau Trusted" data-en="Trusted tier">Niveau Trusted</div>
+          <div class="hero-metric-num">99.5%</div>
+          <div class="hero-metric-sub" data-fr="SLA contractuel" data-en="Contractual SLA">SLA contractuel</div>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-label" data-fr="Latence médiane" data-en="Median latency">Latence médiane</div>
+          <div class="hero-metric-num">28 ms</div>
+          <div class="hero-metric-sub" data-fr="p50 inbound · 30j" data-en="p50 inbound · 30d">p50 inbound · 30j</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="duality" id="duality">
+      <div class="duality-header">
+        <span class="tag" data-fr="Deux portes d'entrée" data-en="Two ways in">Deux portes d'entrée</span>
+        <h2 data-fr="Une infrastructure.<br><em>Deux rôles.</em>"
+            data-en="One infrastructure.<br><em>Two roles.</em>" data-html>
+          Une infrastructure.<br><em>Deux rôles.</em>
+        </h2>
+        <div class="duality-switch" role="tablist">
+          <button class="active" data-target="provider" role="tab" aria-selected="true"
+            data-fr="Fournisseur" data-en="Provider">Fournisseur</button>
+          <button data-target="client" role="tab" aria-selected="false"
+            data-fr="Client" data-en="Client">Client</button>
+          <span class="duality-switch-indicator"></span>
+        </div>
+      </div>
+
+      <div class="duality-stage">
+        <!-- PROVIDER SIDE -->
+        <article class="duality-panel active" data-panel="provider" aria-labelledby="panel-provider-h">
+          <div class="duality-panel-grid">
+            <div class="duality-panel-left">
+              <div class="duality-num">01</div>
+              <div class="duality-role"
+                data-fr="FOURNISSEUR"
+                data-en="PROVIDER">FOURNISSEUR</div>
+              <h3 id="panel-provider-h"
+                data-fr="Votre GPU dormant, payé au cycle."
+                data-en="Your idle GPU, paid per cycle.">
+                Votre GPU dormant, payé au cycle.
+              </h3>
+              <p data-fr="Particulier, entreprise ou opérateur cloud : l'agent Infera s'installe en une commande, détecte vos GPU inactifs et les met au service du réseau. Vous gardez le contrôle, nous gérons le routage."
+                 data-en="Individual, company or cloud operator: the Infera agent installs in one command, detects your idle GPUs and puts them at the network's service. You keep control, we handle the routing.">
+                Particulier, entreprise ou opérateur cloud : l'agent Infera s'installe en une commande, détecte vos GPU inactifs et les met au service du réseau. Vous gardez le contrôle, nous gérons le routage.
+              </p>
+              <ul class="duality-bullets">
+                <li><span class="bullet-k">0,12 €</span><span class="bullet-v" data-fr="par 1M tokens servis" data-en="per 1M tokens served">par 1M tokens servis</span></li>
+                <li><span class="bullet-k">&lt; 60s</span><span class="bullet-v" data-fr="d'installation sur Linux/macOS" data-en="install on Linux/macOS">d'installation sur Linux/macOS</span></li>
+                <li><span class="bullet-k">SEPA</span><span class="bullet-v" data-fr="virement mensuel, relevé détaillé" data-en="monthly transfer, detailed statement">virement mensuel, relevé détaillé</span></li>
+              </ul>
+              <a href="providers.html" class="duality-cta"
+                data-fr="Télécharger l'agent →" data-en="Download the agent →">Télécharger l'agent →</a>
+            </div>
+
+            <div class="duality-panel-right">
+              <!-- Terminal install preview -->
+              <div class="duality-term">
+                <div class="duality-term-head">
+                  <span class="code-dots"><span></span><span></span><span></span></span>
+                  <span>~/infera</span>
+                </div>
+                <div class="duality-term-body">
+<span class="c">$</span> <span class="k">curl</span> -sSL infera.eu/install | sh
+<span class="c">›</span> Detected: <span class="s">RTX 4090 · 24GB VRAM</span>
+<span class="c">›</span> Region: <span class="s">EU-WEST · 14ms to router</span>
+<span class="c">›</span> Agent <span class="ok">running</span> · earning <span class="accent">€0.12/1M tok</span>
+<span class="c">$</span> infera status
+  <span class="ok">●</span> online   utilisation <span class="accent">78%</span>
+  <span class="ok">●</span> jobs     <span class="accent">1,284</span> served / 24h
+  <span class="ok">●</span> payout   <span class="accent">€28.40</span> pending</div>
+              </div>
+              <!-- Earnings ticker -->
+              <div class="duality-ticker">
+                <div class="duality-ticker-label"
+                  data-fr="Revenus / 24h, médian réseau"
+                  data-en="Earnings / 24h, network median">Revenus / 24h, médian réseau</div>
+                <div class="duality-ticker-graph">
+                  <svg viewBox="0 0 220 52" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="tkGrad" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#7EE787" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#7EE787" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <path id="tkArea" d="" fill="url(#tkGrad)"/>
+                    <path id="tkLine" d="" fill="none" stroke="#7EE787" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="duality-ticker-value"><span id="tkVal">28,40</span> €</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CLIENT SIDE -->
+        <article class="duality-panel" data-panel="client" aria-labelledby="panel-client-h" aria-hidden="true">
+          <div class="duality-panel-grid">
+            <div class="duality-panel-left">
+              <div class="duality-num">02</div>
+              <div class="duality-role" data-fr="CLIENT" data-en="CLIENT">CLIENT</div>
+              <h3 id="panel-client-h"
+                data-fr="Basculez vos requêtes. Gardez votre code."
+                data-en="Redirect your calls. Keep your code.">
+                Basculez vos requêtes. Gardez votre code.
+              </h3>
+              <p data-fr="Drop-in du SDK OpenAI : changez une ligne, vos requêtes passent par un réseau souverain européen. Modèles open-source hébergés, latence sous 30ms, facturation au token sans engagement."
+                 data-en="OpenAI SDK drop-in: change one line and your calls run on a sovereign European network. Open-source models hosted, latency below 30ms, per-token billing with no commitment.">
+                Drop-in du SDK OpenAI : changez une ligne, vos requêtes passent par un réseau souverain européen. Modèles open-source hébergés, latence sous 30ms, facturation au token sans engagement.
+              </p>
+              <ul class="duality-bullets">
+                <li><span class="bullet-k">−60%</span><span class="bullet-v" data-fr="vs GPT-4o sur modèle équivalent" data-en="vs GPT-4o on equivalent model">vs GPT-4o sur modèle équivalent</span></li>
+                <li><span class="bullet-k">28 ms</span><span class="bullet-v" data-fr="latence médiane, p50 inbound" data-en="median latency, p50 inbound">latence médiane, p50 inbound</span></li>
+                <li><span class="bullet-k">HDS</span><span class="bullet-v" data-fr="tier dispo pour médical &amp; finance" data-en="tier available for healthcare &amp; finance">tier dispo pour médical &amp; finance</span></li>
+              </ul>
+              <a href="clients.html" class="duality-cta"
+                data-fr="Intégrer l'API →" data-en="Integrate the API →">Intégrer l'API →</a>
+            </div>
+
+            <div class="duality-panel-right">
+              <!-- Animated diff -->
+              <div class="duality-diff">
+                <div class="duality-term-head">
+                  <span class="code-dots"><span></span><span></span><span></span></span>
+                  <span>client.ts</span>
+                </div>
+                <div class="duality-diff-body">
+<span class="diff-minus">- baseURL: <span class="s">"https://api.openai.com/v1"</span>,</span>
+<span class="diff-plus">+ baseURL: <span class="s">"https://api.infera.eu/v1"</span>,</span>
+<span class="c">  apiKey : process.env.INFERA_API_KEY,</span>
+<span class="c">  // ... rest unchanged</span></div>
+                <div class="duality-diff-flash"></div>
+              </div>
+              <!-- Cost comparison bars -->
+              <div class="duality-compare">
+                <div class="duality-compare-label"
+                  data-fr="Coût / 1M tokens · Llama-3 70B"
+                  data-en="Cost / 1M tokens · Llama-3 70B">Coût / 1M tokens · Llama-3 70B</div>
+                <div class="duality-compare-row">
+                  <span class="duality-compare-key">AWS Bedrock</span>
+                  <div class="duality-compare-bar" style="--w: 100%; --c: #6b7683;"><span>2,65 €</span></div>
+                </div>
+                <div class="duality-compare-row">
+                  <span class="duality-compare-key">Azure OpenAI</span>
+                  <div class="duality-compare-bar" style="--w: 88%; --c: #6b7683;"><span>2,30 €</span></div>
+                </div>
+                <div class="duality-compare-row">
+                  <span class="duality-compare-key duality-compare-key--us">Infera</span>
+                  <div class="duality-compare-bar duality-compare-bar--us" style="--w: 40%; --c: #7EE787;"><span>1,05 €</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Pourquoi Infera" data-en="Why Infera">Pourquoi Infera</span>
+      <h2 data-fr="Souverain, simple, sécurisé."
+          data-en="Sovereign, simple, secure.">
+        Souverain, simple, sécurisé.
+      </h2>
+      <p data-fr="Trois garanties non-négociables, pensées pour les équipes B2B européennes."
+         data-en="Three non-negotiable guarantees, built for European B2B teams.">
+        Trois garanties non-négociables, pensées pour les équipes B2B européennes.
+      </p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">◇</div>
+        <h3 data-fr="Souveraineté absolue" data-en="Absolute sovereignty">Souveraineté absolue</h3>
+        <p data-fr="Données et modèles décentralisés. Aucun point de défaillance unique, aucune dépendance aux hyperscalers."
+           data-en="Decentralized data and models. No single point of failure, no hyperscaler dependency.">
+          Données et modèles décentralisés. Aucun point de défaillance unique, aucune dépendance aux hyperscalers.
+        </p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⟶</div>
+        <h3 data-fr="Intégration 30 secondes" data-en="30-second integration">Intégration 30 secondes</h3>
+        <p data-fr="Compatibilité OpenAI stricte. Changez l'URL de base de votre client — le reste fonctionne tel quel."
+           data-en="Strict OpenAI compatibility. Change your client's base URL — everything else keeps working.">
+          Compatibilité OpenAI stricte. Changez l'URL de base de votre client — le reste fonctionne tel quel.
+        </p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">◉</div>
+        <h3 data-fr="Sécurité ciblée" data-en="Tier-based security">Sécurité ciblée</h3>
+        <p data-fr="Grid Public, Trusted ou HDS pour le médical et la finance. Zero-trust by design, isolation par niveau."
+           data-en="Grid Public, Trusted or HDS for healthcare and finance. Zero-trust by design, isolation per tier.">
+          Grid Public, Trusted ou HDS pour le médical et la finance. Zero-trust by design, isolation par niveau.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Démarrer" data-en="Get started">Démarrer</span>
+      <h2 data-fr="Une seule ligne à changer."
+          data-en="One line to change.">
+        Une seule ligne à changer.
+      </h2>
+      <p data-fr="Drop-in du SDK OpenAI officiel. Pointez la baseURL vers Infera, utilisez votre clé, et gardez tout votre code."
+         data-en="Drop-in replacement for the official OpenAI SDK. Point baseURL to Infera, use your key, keep all your code.">
+        Drop-in du SDK OpenAI officiel. Pointez la baseURL vers Infera, utilisez votre clé, et gardez tout votre code.
+      </p>
+    </div>
+    <div class="code-block">
+      <div class="code-head">
+        <span>example.ts</span>
+        <span class="code-dots"><span></span><span></span><span></span></span>
+      </div>
+<pre class="code-body"><span class="c">// Drop-in OpenAI SDK — only baseURL changes</span>
+<span class="k">import</span> OpenAI <span class="k">from</span> <span class="s">"openai"</span>;
+
+<span class="k">const</span> client = <span class="k">new</span> <span class="p">OpenAI</span>({
+  baseURL: <span class="s">"https://api.infera.eu/v1"</span>,  <span class="c">// ← here</span>
+  apiKey : process.env.<span class="p">INFERA_API_KEY</span>,
+});
+
+<span class="k">const</span> res = <span class="k">await</span> client.chat.completions.<span class="p">create</span>({
+  model: <span class="s">"mistral-large"</span>,
+  messages: [{ role: <span class="s">"user"</span>, content: <span class="s">"Bonjour, Europe."</span> }],
+});</pre>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Comment ça marche" data-en="How it works">Comment ça marche</span>
+      <h2 data-fr="Trois étapes, zéro friction." data-en="Three steps, zero friction.">
+        Trois étapes, zéro friction.
+      </h2>
+      <p data-fr="Votre client OpenAI pointe vers notre routeur. Le routeur sélectionne le meilleur node selon votre niveau. Les GPU exécutent, renvoient, et sont payés."
+         data-en="Your OpenAI client points to our router. The router selects the best node for your tier. GPUs execute, return, and get paid.">
+        Votre client OpenAI pointe vers notre routeur. Le routeur sélectionne le meilleur node selon votre niveau. Les GPU exécutent, renvoient, et sont payés.
+      </p>
+    </div>
+    <div class="flow">
+      <div class="flow-node">
+        <div class="label" data-fr="Client (App B2B)" data-en="Client (B2B app)">Client (App B2B)</div>
+        <div class="meta">API CALLS</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">
+        <div class="label" data-fr="Orchestrateur Infera" data-en="Infera orchestrator">Orchestrateur Infera</div>
+        <div class="meta" data-fr="ROUTEUR" data-en="ROUTER">ROUTEUR</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node">
+        <div class="label" data-fr="Réseau de GPU" data-en="GPU network">Réseau de GPU</div>
+        <div class="meta">LOCALAI · HIA AGENT</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="tag" data-fr="Économique &amp; écologique" data-en="Affordable &amp; low-carbon">Économique &amp; écologique</span>
+      <h2 data-fr="Moins cher, moins de carbone, par design."
+          data-en="Cheaper, less carbon, by design.">
+        Moins cher, moins de carbone, par design.
+      </h2>
+      <p data-fr="Le calcul dormant coûte déjà zéro. On le remet au travail au lieu de construire des datacenters neufs."
+         data-en="Idle compute already costs zero. We put it back to work instead of building new datacenters.">
+        Le calcul dormant coûte déjà zéro. On le remet au travail au lieu de construire des datacenters neufs.
+      </p>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">-60%</div>
+        <div class="stat-label" data-fr="Coût médian vs clouds GAFAM sur modèles équivalents."
+             data-en="Median cost vs hyperscalers on equivalent models.">
+          Coût médian vs clouds GAFAM sur modèles équivalents.
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0 €</div>
+        <div class="stat-label" data-fr="D'engagement minimum. Pay-per-token transparent."
+             data-en="Minimum commitment. Transparent pay-per-token.">
+          D'engagement minimum. Pay-per-token transparent.
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label" data-fr="Datacenter construit pour faire tourner Infera."
+             data-en="Datacenter built to run Infera.">
+          Datacenter construit pour faire tourner Infera.
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">×3</div>
+        <div class="stat-label" data-fr="Utilisation moyenne des GPU du réseau."
+             data-en="Average GPU utilization on the network.">
+          Utilisation moyenne des GPU du réseau.
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<section class="waitlist" id="waitlist">
+  <div class="wrap waitlist-inner reveal">
+    <h2 data-fr="Rejoignez le réseau."
+        data-en="Join the network.">
+      Rejoignez le réseau.
+    </h2>
+    <p data-fr="Accès prioritaire à la beta, que vous veniez mettre du calcul dispo ou basculer vos requêtes IA. Un email suffit."
+       data-en="Priority beta access, whether you bring compute or redirect calls. One email is enough.">
+      Accès prioritaire à la beta, que vous veniez mettre du calcul dispo ou basculer vos requêtes IA. Un email suffit.
+    </p>
+    <form class="waitlist-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Merci !';">
+      <input type="email" required placeholder="votre@email.pro" aria-label="Email">
+      <button type="submit" data-fr="Rejoindre →" data-en="Join →">Rejoindre →</button>
+    </form>
+    <p class="disclaimer" data-fr="Zéro spam. Un seul email : quand votre accès est prêt."
+       data-en="Zero spam. One email: when your access is ready.">
+      Zéro spam. Un seul email : quand votre accès est prêt.
+    </p>
+  </div>
+</section>
+
+<div id="footer-slot"></div>
+
+<script src="partials.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+<script src="globe.js"></script>
+<script>
+  mount('home');
+
+  // --- Telemetry live widget ---
+  (function(){
+    const nodesEl = document.getElementById('t-nodes');
+    const flightEl = document.getElementById('t-flight');
+    const latEl = document.getElementById('t-lat');
+    const tpsEl = document.getElementById('t-tps');
+    const feedEl = document.getElementById('t-feed');
+    const sparkLine = document.getElementById('sparkLine');
+    const sparkArea = document.getElementById('sparkArea');
+
+    const history = Array.from({length: 32}, () => 40 + Math.random()*20);
+    function drawSpark() {
+      const w = 200, h = 28, n = history.length;
+      const min = Math.min(...history), max = Math.max(...history);
+      const rng = (max - min) || 1;
+      const step = w / (n - 1);
+      let d = '';
+      for (let i = 0; i < n; i++) {
+        const x = i * step;
+        const y = h - 2 - ((history[i] - min) / rng) * (h - 4);
+        d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+      }
+      sparkLine.setAttribute('d', d);
+      sparkArea.setAttribute('d', d + `L ${w} ${h} L 0 ${h} Z`);
+    }
+    drawSpark();
+
+    const routes = [
+      ['PAR', 'BER'],['LON','AMS'],['FRA','MAD'],['MIL','WAW'],
+      ['AMS','HEL'],['BER','LIS'],['ZRH','BUC'],['PAR','OSL'],
+      ['STO','DUB'],['COP','VIE'],['LYO','ATH'],['BCN','PRG']
+    ];
+    function addFeed() {
+      const r = routes[Math.floor(Math.random()*routes.length)];
+      const ms = (15 + Math.random()*25).toFixed(0);
+      const id = Math.random().toString(16).slice(2,8);
+      const div = document.createElement('div');
+      div.className = 'telemetry-feed-line';
+      div.innerHTML = `<span class="ok">✓</span> <span class="route">${r[0]}→${r[1]}</span> ${ms}ms <span style="opacity:0.5">#${id}</span>`;
+      feedEl.insertBefore(div, feedEl.firstChild);
+      while (feedEl.children.length > 3) feedEl.removeChild(feedEl.lastChild);
+    }
+    for (let i=0;i<3;i++) addFeed();
+
+    let nodes = 1284, flight = 312, lat = 28, tps = 48.2;
+    setInterval(() => {
+      nodes += Math.floor((Math.random()-0.45)*8);
+      flight += Math.floor((Math.random()-0.5)*24);
+      flight = Math.max(220, Math.min(480, flight));
+      lat = 22 + Math.random()*14;
+      tps = 40 + Math.random()*18;
+      nodesEl.textContent = nodes.toLocaleString('fr-FR');
+      flightEl.innerHTML = flight + ' <span class="accent">' + (Math.random()>0.5?'▲':'▼') + '</span>';
+      latEl.textContent = lat.toFixed(0) + ' ms';
+      tpsEl.textContent = tps.toFixed(1) + 'k tok/s';
+      history.push(flight); history.shift();
+      drawSpark();
+      if (Math.random() < 0.7) addFeed();
+    }, 1800);
+  })();
+
+  // --- Duality switch + earnings ticker ---
+  (function(){
+    const sw = document.querySelector('.duality-switch');
+    if (!sw) return;
+    const buttons = sw.querySelectorAll('button');
+    const panels = document.querySelectorAll('.duality-panel');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        sw.setAttribute('data-active', target);
+        buttons.forEach(b => {
+          const active = b.dataset.target === target;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        panels.forEach(p => {
+          const active = p.dataset.panel === target;
+          p.classList.toggle('active', active);
+          p.setAttribute('aria-hidden', active ? 'false' : 'true');
+        });
+      });
+    });
+
+    // Earnings ticker sparkline
+    const tkLine = document.getElementById('tkLine');
+    const tkArea = document.getElementById('tkArea');
+    const tkVal = document.getElementById('tkVal');
+    if (tkLine) {
+      // Build 24 hourly earnings — plausible overnight/daytime pattern
+      const tkHist = Array.from({length: 24}, (_, i) => {
+        const base = 0.8 + 0.5 * Math.sin((i/24) * Math.PI * 2 - Math.PI/2);
+        return base + Math.random() * 0.25;
+      });
+      function drawTk() {
+        const w = 220, h = 52;
+        const min = Math.min(...tkHist), max = Math.max(...tkHist);
+        const rng = (max - min) || 1;
+        const step = w / (tkHist.length - 1);
+        let d = '';
+        for (let i = 0; i < tkHist.length; i++) {
+          const x = i * step;
+          const y = h - 2 - ((tkHist[i] - min) / rng) * (h - 6);
+          d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+        }
+        tkLine.setAttribute('d', d);
+        tkArea.setAttribute('d', d + `L ${w} ${h} L 0 ${h} Z`);
+      }
+      drawTk();
+      let current = 28.40;
+      setInterval(() => {
+        const delta = (Math.random() - 0.45) * 0.18;
+        current = Math.max(24, Math.min(34, current + delta));
+        tkVal.textContent = current.toFixed(2).replace('.', ',');
+        tkHist.push(0.8 + Math.random() * 0.6);
+        tkHist.shift();
+        drawTk();
+      }, 2200);
+    }
+  })();
+</script>
+</body>
+</html>

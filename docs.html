@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docs — Infera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+
+<div id="nav-slot"></div>
+
+<div class="wrap">
+
+  <section class="page-head reveal">
+    <div class="crumb">
+      <a href="index.html" data-fr="Accueil" data-en="Home">Accueil</a>
+      <span class="sep">/</span>
+      <span class="cur">Docs</span>
+    </div>
+    <h1 data-fr="Documentation · API Reference." data-en="Documentation · API Reference.">Documentation · API Reference.</h1>
+    <p class="lead" data-fr="Compatibilité OpenAI stricte. La plupart des SDK fonctionnent en changeant uniquement baseURL."
+       data-en="Strict OpenAI compatibility. Most SDKs work by changing only baseURL.">
+      Compatibilité OpenAI stricte. La plupart des SDK fonctionnent en changeant uniquement baseURL.
+    </p>
+  </section>
+
+  <div class="page-layout">
+    <aside class="page-sidebar reveal">
+      <h4 data-fr="Démarrage" data-en="Start">Démarrage</h4>
+      <ul>
+        <li><a href="#quickstart" class="active">Quickstart</a></li>
+        <li><a href="#auth" data-fr="Authentification" data-en="Authentication">Authentification</a></li>
+        <li><a href="#tiers">Niveaux</a></li>
+      </ul>
+      <h4>Endpoints</h4>
+      <ul>
+        <li><a href="#chat">/chat/completions</a></li>
+        <li><a href="#embed">/embeddings</a></li>
+        <li><a href="#models">/models</a></li>
+      </ul>
+      <h4 data-fr="Avancé" data-en="Advanced">Avancé</h4>
+      <ul>
+        <li><a href="#stream">Streaming</a></li>
+        <li><a href="#tools">Function calling</a></li>
+        <li><a href="#errors">Errors</a></li>
+      </ul>
+    </aside>
+
+    <div class="page-content reveal">
+      <h2 id="quickstart">Quickstart</h2>
+      <p data-fr="Trois étapes : récupérez une clé API en beta, pointez votre SDK vers <code>https://api.infera.eu/v1</code>, appelez un modèle."
+         data-en="Three steps: grab a beta API key, point your SDK to <code>https://api.infera.eu/v1</code>, call a model."
+         data-html>
+        Trois étapes : récupérez une clé API en beta, pointez votre SDK vers <code>https://api.infera.eu/v1</code>, appelez un modèle.
+      </p>
+      <div class="callout">
+        <strong>Beta:</strong> l'accès est sur invitation. <a href="contact.html" style="color:var(--accent);">Rejoindre la waitlist</a> · les clés sont émises sous 48h.
+      </div>
+
+      <h2 id="auth">Authentication</h2>
+      <p>Bearer token dans l'en-tête <code>Authorization</code>. Les clés sont préfixées <code>infera_sk_</code>, révocables à chaud, rotation recommandée tous les 90 jours.</p>
+      <div class="endpoint"><span class="method post">HEADER</span><span class="path">Authorization: Bearer infera_sk_•••</span></div>
+
+      <h2 id="tiers" data-fr="Niveaux" data-en="Tiers">Niveaux</h2>
+      <p data-fr="Sélectionnez le tier via l'en-tête <code>X-Infera-Tier</code>. Par défaut : <code>public</code>. Trusted et HDS requièrent un contrat."
+         data-en="Select tier via the <code>X-Infera-Tier</code> header. Default: <code>public</code>. Trusted and HDS require a contract."
+         data-html>
+        Sélectionnez le tier via l'en-tête <code>X-Infera-Tier</code>. Par défaut : <code>public</code>. Trusted et HDS requièrent un contrat.
+      </p>
+      <ul>
+        <li><code>public</code> — dev, tests, best-effort.</li>
+        <li><code>trusted</code> — production B2B, SLA 99.5%.</li>
+        <li><code>hds</code> — données de santé &amp; financières régulées.</li>
+      </ul>
+
+      <h2 id="chat">Endpoints</h2>
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/v1/chat/completions</span>
+        <span class="desc" data-fr="Chat &amp; completions, support streaming" data-en="Chat &amp; completions, streaming supported">Chat &amp; completions, support streaming</span>
+      </div>
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/v1/embeddings</span>
+        <span class="desc" data-fr="Embeddings (768 / 1024 / 4096 dims)" data-en="Embeddings (768 / 1024 / 4096 dims)">Embeddings (768 / 1024 / 4096 dims)</span>
+      </div>
+      <div class="endpoint" id="models">
+        <span class="method get">GET</span>
+        <span class="path">/v1/models</span>
+        <span class="desc" data-fr="Catalogue des modèles disponibles" data-en="Available models catalog">Catalogue des modèles disponibles</span>
+      </div>
+
+      <h2 id="stream">Streaming</h2>
+      <p data-fr="SSE standard OpenAI. Ajoutez <code>stream: true</code>. Les chunks sont identiques (delta format)."
+         data-en="OpenAI-standard SSE. Pass <code>stream: true</code>. Chunks are identical (delta format)."
+         data-html>
+        SSE standard OpenAI. Ajoutez <code>stream: true</code>. Les chunks sont identiques (delta format).
+      </p>
+
+      <h2 id="tools">Function calling</h2>
+      <p data-fr="Support complet sur modèles Llama 3.3, Mistral Large, Qwen 2.5. Interface <code>tools</code> / <code>tool_choice</code> identique à OpenAI."
+         data-en="Full support on Llama 3.3, Mistral Large, Qwen 2.5. <code>tools</code> / <code>tool_choice</code> interface identical to OpenAI."
+         data-html>
+        Support complet sur modèles Llama 3.3, Mistral Large, Qwen 2.5. Interface <code>tools</code> / <code>tool_choice</code> identique à OpenAI.
+      </p>
+
+      <h2 id="errors">Errors</h2>
+      <p data-fr="Codes HTTP standard. Payload JSON identique OpenAI (<code>error.message</code>, <code>error.type</code>, <code>error.code</code>). Codes spécifiques Infera préfixés <code>infera_</code>."
+         data-en="Standard HTTP codes. OpenAI-identical JSON payload (<code>error.message</code>, <code>error.type</code>, <code>error.code</code>). Infera-specific codes prefixed <code>infera_</code>."
+         data-html>
+        Codes HTTP standard. Payload JSON identique OpenAI (<code>error.message</code>, <code>error.type</code>, <code>error.code</code>). Codes spécifiques Infera préfixés <code>infera_</code>.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div id="footer-slot"></div>
+<script src="partials.js"></script>
+<script src="shared.js"></script>
+<script>mount('docs');</script>
+</body>
+</html>
